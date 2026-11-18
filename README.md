@@ -141,4 +141,3 @@ EXPO_PUBLIC_DEMO_MODE=true npx expo export --platform all
 
 ---
 
-Feito com ❤️ pela equipe BioOleo. Brasil.
