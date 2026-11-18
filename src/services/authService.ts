@@ -31,9 +31,8 @@ async function fetchUserProfile(userId: string): Promise<UserProfile | null> {
     .eq("id", userId)
     .maybeSingle();
 
-  if (error || !data) {
-    return null;
-  }
+  if (error) throw new Error("Não foi possível consultar seu perfil. Verifique a conexão.");
+  if (!data) return null;
 
   const profile = data as ProfileRecord;
 
@@ -60,6 +59,9 @@ export async function signInWithEmail(
     password,
   });
 
+  if (error?.name === "AuthRetryableFetchError" || (error?.status ?? 0) >= 500) {
+    throw new Error("Não foi possível conectar ao Supabase. Tente novamente.");
+  }
   if (error || !data.user) {
     throw new Error("E-mail ou senha incorretos.");
   }
@@ -87,9 +89,10 @@ export async function signInWithEmail(
 export async function getCurrentUserProfile(): Promise<UserProfile | null> {
   const { data, error } = await supabase.auth.getUser();
 
-  if (error || !data.user) {
-    return null;
+  if (error?.name === "AuthRetryableFetchError" || (error?.status ?? 0) >= 500) {
+    throw new Error("Não foi possível verificar a sessão. Verifique a conexão.");
   }
+  if (error || !data.user) return null;
 
   const profile = await fetchUserProfile(data.user.id);
 

@@ -2,24 +2,24 @@ export const brand = {
   name: "BIOOLEO BRASIL",
 
   colors: {
-    background: "#050505",
-    surface: "#141414",
-    surfaceElevated: "#202020",
+    /** Core palette references to the unified theme Colors */
+    primary: "colors.primary",
+    primaryDark: "colors.primaryDark",
+    yellow: "colors.warning",
+    yellowDark: "colors.warningDark",
 
-    primary: "#00A95D",
-    primaryDark: "#008447",
+    text: "colors.text",
+    textSecondary: "colors.textSecondary",
+    textMuted: "colors.textMuted",
 
-    yellow: "#FFDE24",
-    yellowDark: "#EBC400",
+    background: "colors.background",
+    surface: "colors.surface",
+    surfaceElevated: "colors.surfaceMuted",
 
-    text: "#FFFFFF",
-    textSecondary: "#B9B9B9",
-    textMuted: "#858585",
-
-    border: "#343434",
-    success: "#00A95D",
-    error: "#EF5350",
-    warning: "#FFDE24",
+    border: "colors.border",
+    success: "colors.success",
+    error: "colors.error",
+    warning: "colors.warning",
   },
 
   radius: {

@@ -1,4 +1,4 @@
-import { Colors, MaxContentWidth, Spacing } from "@/constants/theme";
+import { MaxContentWidth, Spacing } from "@/constants/theme";
 import {
   TabList,
   TabListProps,
@@ -9,7 +9,10 @@ import {
 } from "expo-router/ui";
 import { SymbolView } from "expo-symbols";
 import type { ComponentProps } from "react";
-import { Pressable, StyleSheet, useColorScheme, View } from "react-native";
+import { Pressable, StyleSheet, View } from "react-native";
+
+import { useColorScheme } from 'react-native';
+import { Colors } from '@/constants/theme';
 
 import { ExternalLink } from "./external-link";
 import { ThemedText } from "./themed-text";
@@ -21,11 +24,11 @@ export default function AppTabs() {
       <TabSlot style={{ height: "100%" }} />
       <TabList asChild>
         <CustomTabList>
-          <TabTrigger name="home" href="/" asChild>
-            <TabButton>Home</TabButton>
+          <TabTrigger name="home" asChild>
+            <TabButton>Início</TabButton>
           </TabTrigger>
-          <TabTrigger name="explore" href="/explore" asChild>
-            <TabButton>Explore</TabButton>
+          <TabTrigger name="explore" asChild>
+            <TabButton>Explorar</TabButton>
           </TabTrigger>
         </CustomTabList>
       </TabList>
@@ -60,24 +63,24 @@ export function TabButton({
   );
 }
 
-export function CustomTabList(props: TabListProps) {
+export function CustomTabList() {
   const scheme = useColorScheme();
-  const colors = Colors[scheme === "dark" ? "dark" : "light"];
+  const base = scheme === 'dark' ? Colors.dark : Colors.light;
 
   return (
-    <View {...props} style={styles.tabListContainer}>
+    <View style={styles.tabListContainer}>
       <ThemedView type="backgroundElement" style={styles.innerContainer}>
         <ThemedText type="smallBold" style={styles.brandText}>
           Expo Starter
         </ThemedText>
 
-        {props.children}
+        {children}
 
         <ExternalLink href="https://docs.expo.dev" asChild>
           <Pressable style={styles.externalPressable}>
             <ThemedText type="link">Docs</ThemedText>
             <SymbolView
-              tintColor={colors.text}
+              tintColor={base.text}
               name={{ ios: "arrow.up.right.square", web: "link" }}
               size={12}
             />
@@ -96,6 +99,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     flexDirection: "row",
+    maxWidth: MaxContentWidth,
   },
   innerContainer: {
     paddingVertical: Spacing.two,

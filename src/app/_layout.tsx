@@ -1,6 +1,7 @@
 import { DarkTheme, DefaultTheme, Stack, ThemeProvider } from "expo-router";
 
-import { useColorScheme } from "react-native";
+import { DEMO_MODE } from "@/config/env";
+import { useColorScheme } from "@/hooks/use-color-scheme";
 
 export default function RootLayout() {
   const colorScheme = useColorScheme();
@@ -15,13 +16,15 @@ export default function RootLayout() {
       >
         <Stack.Screen name="index" />
         <Stack.Screen name="admin" />
-        <Stack.Screen name="driver" />
-        <Stack.Screen name="containers" />
-        <Stack.Screen name="establishments" />
-        <Stack.Screen name="dispatch" />
-        <Stack.Screen name="scanner" />
-        <Stack.Screen name="container-labels" />
-        <Stack.Screen name="returns" />
+        <Stack.Protected guard={!DEMO_MODE}>
+          <Stack.Screen name="driver" />
+          <Stack.Screen name="containers" />
+          <Stack.Screen name="establishments" />
+          <Stack.Screen name="dispatch" />
+          <Stack.Screen name="scanner" />
+          <Stack.Screen name="container-labels" />
+          <Stack.Screen name="returns" />
+        </Stack.Protected>
       </Stack>
     </ThemeProvider>
   );
