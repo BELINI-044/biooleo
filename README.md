@@ -1,143 +1,288 @@
-# BioOleo Brasil
+# BioOleo — Gestão e rastreamento de bombonas
 
-<a href="https://expo.dev">
-  <img src="https://expo.dev/assets/icons/expo-icon-192.png" alt="Expo" width="40" valign="middle" hspace="8">
-</a>
-<span style="font-size:1.25em; vertical-align:middle;"> Painel administrativo de gestão e rastreamento de bombonas</span>
+Aplicativo administrativo da BioOleo para gerenciar bombonas de óleo usado, clientes, caminhões, movimentações, histórico de localização e alertas operacionais.
 
-<p align="center">
-  <strong>Expo SDK 58 · React Native · TypeScript · Expo Router</strong>
-</p>
+O projeto utiliza Expo SDK 58, React Native, TypeScript e Expo Router. A demonstração funciona sem rastreadores físicos e sem credenciais do Supabase: 3.000 bombonas e seus dispositivos são gerados localmente e identificados como dados simulados.
 
----
+## Início rápido da demonstração
 
-## 🏠 Iniciar a Demonstração
+Requisitos:
+
+- Node.js compatível com o Expo SDK 58;
+- npm;
+- Google Chrome, Firefox, Edge ou Safari atualizado;
+- conexão com a internet para carregar o mapa-base no navegador.
+
+Instale as dependências e inicie a versão web na porta 8081:
 
 ```bash
 npm ci
-EXPO_PUBLIC_DEMO_MODE=true npx expo start --web
+EXPO_PUBLIC_DEMO_MODE=true npx expo start --web --port 8081 --clear
 ```
 
-### No celular
+Acesse [http://localhost:8081](http://localhost:8081) e selecione **Entrar na demonstração**. O modo demonstração não exige e-mail ou senha.
 
-Execute `EXPO_PUBLIC_DEMO_MODE=true npx expo start` e use um cliente Expo compatível com o SDK 58. Também é possível colocar `EXPO_PUBLIC_DEMO_MODE=true` no `.env` antes de iniciar o Metro.
+> A simulação começa pausada. Selecione **Iniciar simulação** no topo do painel ou em **Configurações** para iniciar as atualizações automáticas.
 
-O acesso local usa o botão **Entrar na demonstração** e dispensa configuração do Supabase.
+No PowerShell, use:
 
-### 📋 O que fazer na demonstração
+```powershell
+$env:EXPO_PUBLIC_DEMO_MODE="true"
+npx expo start --web --port 8081 --clear
+```
 
-1. **Painel geral** — Confira as 3.000 bombonas, sendo 1.500 no depósito, 1.320 em clientes e 180 em transporte.
+## Roteiro sugerido para apresentação
 
-2. **Iniciar simulação** — O relógio da demonstração avança 30 minutos a cada 12 segundos. Abra **Mapa GPS** para localizar uma bombona pelo código, aproximar os agrupamentos e acompanhar os dois caminhões.
+Este roteiro leva aproximadamente cinco minutos:
 
-3. **Cadastrar bombona** — Confira o código gerado, informe os dados operacionais e salve. Os detalhes exibem a etiqueta QR Code, o dispositivo e o mapa. Use **Ler QR Code** para abrir a etiquela pela câmera ou pelo código.
+1. Entre na demonstração e apresente o **Painel geral**, com os indicadores calculados a partir dos registros: 3.000 bombonas, comunicação dos rastreadores, distribuição operacional e alertas.
+2. Selecione **Iniciar simulação**. Cada ciclo de 12 segundos representa uma transmissão operacional de 30 minutos.
+3. Abra **Mapa GPS**, pesquise `BIO-000001`, selecione a bombona e mostre sua posição, bateria, comunicação, precisão e última atualização.
+4. Abra **Bombonas** e consulte os detalhes da mesma bombona. Mostre o QR Code, o rastreador Vision Barra Edge e as abas de localização, histórico, movimentações e alertas.
+5. Selecione **Cadastrar bombona**. O formulário já sugere o próximo código, coordenadas do depósito e identificadores exclusivos. Ao salvar, a bombona passa a aparecer na lista e no mapa.
+6. Mostre **Clientes** e **Caminhões**, incluindo as bombonas vinculadas e as rotas simuladas dos dois veículos.
+7. Em **Configurações**, execute **Simular bateria baixa** ou **Simular perda de comunicação**. Depois abra **Alertas** para mostrar as ocorrências simuladas.
+8. Abra **Histórico**, alterne entre tabela e mapa e demonstre a exportação CSV.
+9. Recarregue a página para comprovar que os cadastros e as alterações continuam salvos localmente.
 
-4. **Clientes ou Caminhões** — Selecione um registro e use as ações de entrega, associação e descarga. Os mesmos eventos podem ser registrados em **Movimentações** nos detalhes da bombona.
+## Cenário da demonstração
 
-5. **Configurações** — Teste perda de comunicação, recuperação e bateria baixa. O alerta de perda de comunicação exige mais de 60 minutos no relógio simulado. Use **Pausar simulação** para congelar as transmissões automáticas.
+- 3.000 bombonas identificadas de `BIO-000001` a `BIO-003000`;
+- 3.000 rastreadores simulados Vision Telematics Barra Edge SL-0001-PT;
+- 1.500 bombonas no depósito;
+- 1.320 bombonas em clientes;
+- 180 bombonas em transporte;
+- dois caminhões com rotas simuladas;
+- clientes e restaurantes fictícios em locais configuráveis do Paraná;
+- dispositivos conectados, sem comunicação e com bateria baixa;
+- atualização visual a cada 12 segundos, equivalente a 30 minutos operacionais;
+- dados, posições e alertas claramente identificados como demonstração.
 
-6. **Histórico** — Escolha posições ou movimentações, filtre os registros e exporte a página em CSV. A demonstração mantém as oito janelas de transmissão mais recentes e até 96 pontos por rota. Os cadastros, movimentações, alertas e o estado do simulador persistem no dispositivo via AsyncStorage.
+As coordenadas não representam a posição real de ativos da BioOleo.
 
-7. **Reiniciar dados da demonstração** — Restaura a base inicial após confirmação.
+## Funcionalidades
 
-> 📍 As localizações são fictícias. Os pontos de referência, os clientes e as rotas podem ser ajustados em [geo.ts](src/data/demo/geo.ts) e [seed.ts](src/data/demo/seed.ts). O aplicativo usa React Native Maps no Android e iOS. No navegador, o mapa interativo usa Leaflet e OpenStreetMap.
+### Painel administrativo
 
-> 🌐 Mapa-base: configure `EXPO_PUBLIC_MAPA_WEB_URL` e `EXPO_PUBLIC_MAPA_WEB_ATRIBUICAO` para outro provedor cartográfico. Em builds Android próprios, configure `GOOGLE_MAPS_ANDROID_API_KEY` e `BIOOLEO_ANDROID_PACKAGE`.
+- indicadores operacionais calculados a partir da base atual;
+- gráficos de distribuição, movimentações, comunicação e alertas;
+- últimas movimentações;
+- menu lateral no desktop e navegação adaptada em telas menores.
 
----
+### Mapa GPS
 
-## ⚙️ Configurar o Supabase
+- 3.000 posições individuais com agrupamento visual;
+- pesquisa por código ou identificação;
+- filtros por situação, comunicação, cliente, caminhão e alertas;
+- diferenciação entre posição atualizada, desatualizada, aproximada e sem comunicação;
+- centralização do mapa e aproximação automática da bombona selecionada;
+- dois caminhões com deslocamento simulado.
 
-1. No projeto Supabase que contém as tabelas operacionais existentes, revise as migrations. Aplique-as em uma instância de homologação primeiro e depois no projeto de destino com a CLI da Supabase (`supabase link --project-ref <referência>` e `supabase db push`), ou com o SQL Editor na ordem dos arquivos. Consulte a pasta [supabase/migrations](./supabase/migrations).
+No Android e no iOS o aplicativo utiliza React Native Maps. Na web utiliza Leaflet e OpenStreetMap por padrão.
 
-2. Configure as variáveis no `.env`:
+### Cadastros e operação
+
+- cadastro, edição, consulta e exclusão de bombonas;
+- validação de códigos, números de identificação, dispositivos e números de série duplicados;
+- QR Code exclusivo sem exposição de dados sensíveis;
+- consulta manual do QR Code e leitura pela câmera em ambiente compatível;
+- cadastro e edição de clientes;
+- consulta e edição dos dois caminhões da demonstração;
+- associação de bombonas a clientes e caminhões;
+- registro de entrega, retirada, entrada, saída, inspeção e manutenção;
+- confirmação antes de exclusões e reinício dos dados.
+
+### Histórico e alertas
+
+- histórico individual de posições e movimentações;
+- filtros por bombona, cliente, período e tipo;
+- visualização em tabela e mapa;
+- paginação e exportação CSV com cabeçalhos em português;
+- alertas de comunicação, bateria, movimentação inesperada, área geográfica e entrada ou saída do depósito;
+- estados pendente, visualizado e resolvido.
+
+## Persistência da demonstração
+
+O estado da demonstração é armazenado por AsyncStorage. No navegador, o armazenamento local preserva:
+
+- bombonas e rastreadores cadastrados ou editados;
+- clientes;
+- vínculos e movimentações;
+- posições e rotas recentes;
+- alertas;
+- estado e ciclo do simulador.
+
+Para restaurar a base inicial, abra **Configurações**, selecione **Reiniciar dados da demonstração** e confirme a operação.
+
+Dados simulados e dados reais usam fluxos separados. O aplicativo não combina os dois ambientes.
+
+## Estrutura principal
+
+```text
+src/
+├── app/                          # Rotas e telas do Expo Router
+├── components/tracking/          # Painel, mapa, cadastros, histórico e alertas
+├── config/                       # Variáveis e comportamento do ambiente
+├── data/demo/                    # Base e coordenadas fictícias da demonstração
+├── lib/                          # Formatação pt-BR, CNPJ, CSV e Supabase
+├── services/tracking/
+│   ├── MockTrackingProvider.ts   # Motor funcional da demonstração
+│   ├── VisionTrackingProvider.ts # Adaptador reservado à integração oficial
+│   ├── demoStorage.ts            # Persistência local
+│   ├── model.ts                  # Validação e modelo de dados
+│   ├── repository.ts             # Acesso paginado ao Supabase
+│   └── types.ts                  # Contrato independente do fornecedor
+└── types/                        # Tipos do domínio de rastreamento
+
+supabase/migrations/              # Estrutura, RLS, telemetria e relatórios
+```
+
+As telas consomem o contrato `TrackingProvider`. O simulador e a futura integração com a Vision Telematics ficam isolados, permitindo substituir a fonte da telemetria sem reescrever a interface.
+
+## Variáveis de ambiente
+
+Copie `.env.example` para `.env` e ajuste o ambiente desejado:
 
 ```env
-EXPO_PUBLIC_DEMO_MODE=false
-EXPO_PUBLIC_SUPABASE_URL=sua-url-aqui
-EXPO_PUBLIC_SUPABASE_PUBLISHABLE_KEY=sua-chave-aqui
+EXPO_PUBLIC_DEMO_MODE=true
+EXPO_PUBLIC_SUPABASE_URL=
+EXPO_PUBLIC_SUPABASE_PUBLISHABLE_KEY=
+
+GOOGLE_MAPS_ANDROID_API_KEY=
+BIOOLEO_ANDROID_PACKAGE=
+
+# Opcionais para outro mapa-base web
+# EXPO_PUBLIC_MAPA_WEB_URL=
+# EXPO_PUBLIC_MAPA_WEB_ATRIBUICAO=
 ```
 
-3. Crie ou selecione uma conta de Auth e confirme que o registro existente `public.profiles` tem o mesmo ID da conta, `role='admin'` e `is_active=true`. A autenticação e as políticas RLS do rastreamento usam esse perfil.
+Use `EXPO_PUBLIC_DEMO_MODE=true` para apresentação e `false` para o ambiente conectado ao Supabase.
 
-   ```sql
-   insert into public.profiles(id, full_name, role)
-   values ('<id da conta de Auth>', 'Administrador BioOleo', 'admin');
-   ```
+Nunca adicione a chave de serviço do Supabase ao aplicativo. Somente a chave pública deve ser exposta por variável `EXPO_PUBLIC_*`.
 
-4. Entre com o e-mail e a senha do administrador. Em **Configurações**, preencha as coordenadas verificadas do depósito. A opção **Operações existentes** mantém o acesso às telas conectadas às tabelas anteriores. As migrations adicionam um cadastro de rastreamento próprio. Para vincular ativos operacionais já cadastrados, planeje a importação ou associação com base nos IDs e códigos verificados no banco de destino.
+## Configuração do Supabase
 
-5. O bucket privado `relatorios-biooleo` recebe somente relatórios CSV arquivados por ação explícita do administrador. A política de acesso restringe a leitura ao diretório daquele usuário.
+1. Crie um projeto de homologação no Supabase.
+2. Configure `EXPO_PUBLIC_SUPABASE_URL` e `EXPO_PUBLIC_SUPABASE_PUBLISHABLE_KEY`.
+3. Aplique as migrations na ordem apresentada em `supabase/migrations`:
+   - `20261118000100_rastreamento.sql`;
+   - `20261118000200_operacoes_rastreamento.sql`;
+   - `20261118000300_telemetria_e_relatorios.sql`.
+4. Crie uma conta no Supabase Auth.
+5. Confirme que `public.profiles` possui um registro ativo com o mesmo ID e perfil administrativo:
 
-### 📊 Telemetria (produção)
+```sql
+insert into public.profiles (id, full_name, role)
+values ('<id da conta de Auth>', 'Administrador BioOleo', 'admin');
+```
 
-As tabelas de telemetria são independentes do modo demonstração. Para as 144.000 posições/dia previstas:
+6. Inicie o aplicativo com `EXPO_PUBLIC_DEMO_MODE=false` e entre com o e-mail e a senha do administrador.
 
-- O histórico usa índice por bombona e horário e cursor por horário e ID.
-- São consultadas no máximo 51 linhas por solicitação, incluindo a verificação da próxima página.
-- A visão de posição atual obtém apenas a leitura mais recente por ativo.
-- Os gráficos consultam agregações no banco.
+As migrations preservam as tabelas operacionais existentes, adicionam constraints, índices e políticas RLS e disponibilizam consultas paginadas para o histórico.
 
-**Política de retenção:** preserva 90 dias de posições, aproximadamente 13 milhões de linhas na capacidade prevista. Após homologar o volume, configure uma tarefa de backend ou Supabase Cron para chamar `tracking_purgar_posicoes()` a cada hora. Cada execução remove até 20.000 linhas antigas. Monitore a idade do registro mais antigo, o volume e o autovacuum.
+### Retenção de telemetria
 
-Agende `tracking_verificar_sinal()` a cada 15 minutos para gerar alertas de mais de 60 minutos sem transmissão. As duas funções são reservadas ao backend. Para horizontes maiores, archive antes da purga e avalie particionamento por período.
+O volume previsto pode chegar a 144.000 posições por dia. A implementação:
 
----
+- consulta o histórico em páginas de até 50 itens;
+- usa cursor por horário e ID;
+- obtém a posição atual sem carregar todo o histórico;
+- possui índices por ativo e horário;
+- prevê retenção de 90 dias;
+- disponibiliza `tracking_purgar_posicoes()` para remoção controlada em lotes;
+- disponibiliza `tracking_verificar_sinal()` para gerar alertas de ausência de transmissão.
 
-## 🛰️ Integração com Vision Telematics
+Antes da produção, agende essas funções no backend ou pelo Supabase Cron e monitore o volume, o autovacuum e o registro mais antigo.
 
-O simulador implementa `TrackingProvider`. O adaptador `VisionTrackingProvider` identifica o ponto de entrada da integração oficial. A interface de produção lê as posições normalizadas do Supabase e pode receber a integração sem alterar as telas.
+## Integração futura com a Vision Telematics
 
-### Credenciais necessárias da Vision Telematics
+O projeto não inventa endpoints, credenciais ou formatos da Vision Telematics. `VisionTrackingProvider` permanece indisponível até a entrega da documentação oficial.
 
-| Campo | Descrição |
-|-------|-----------|
-| Endereço oficial | URL do endpoint de recebimento |
-| Método de autenticação | Tipo de auth (Bearer, HMAC, etc.) |
-| Credenciais com escopo de leitura | Chaves/API keys com permissão de leitura |
-| Identificador da Barra Edge SL-0001-PT | ID de provisionamento de cada dispositivo |
-| Unidade de provisionamento | Número de série associado ao código/serial cadastrado |
-| Campos de horário, coordenadas, precisão, velocidade e bateria | Formatos e unidades de medida |
-| Frequência suportada | Intervalo de recebimento de eventos |
-| Forma de recebimento | Webhook autenticado ou consulta periódica |
-| Limites, paginação e política de retentativas | Configurações de controle de fluxo |
-| Documentação do sensor de remoção | Caso o dispositivo ofereça esse evento |
+Para conectar os rastreadores físicos ainda serão necessários:
 
-### Ingestão de dados
+- endereço oficial da API;
+- método de autenticação e credenciais de servidor;
+- identificador oficial de cada Barra Edge SL-0001-PT;
+- formato dos eventos, coordenadas, horários, precisão, velocidade e bateria;
+- frequência de transmissão;
+- definição de webhook ou consulta periódica;
+- limites, paginação, retentativas e tratamento de erros;
+- documentação de sensores adicionais, inclusive eventual detecção de remoção;
+- processo de provisionamento e associação entre serial, rastreador e bombona.
 
-> Guarde as credenciais no servidor. Após validar e normalizar os eventos, envie posições reais para `tracking_receber_posicao` e rotas para `tracking_receber_rota` com uma credencial de backend.
+As credenciais devem permanecer no servidor. O backend deve validar, normalizar e sincronizar a telemetria com o Supabase antes que o aplicativo a consulte.
 
-A ingestão desduplica transmissões e preserva a leitura mais recente diante de mensagens atrasadas. Passe o indicador de remoção somente quando o sensor oficial reportar esse evento. Valide:
-
-- Associação do ativo
-- Coordenadas dentro do esperado
-- Atraso dentro do limite
-- Erro de autenticação
-- Perda/recuperação de sinal
-
----
-
-## 🔍 Verificações locais
+## Comandos de desenvolvimento
 
 ```bash
-npx expo lint
+# Servidor de desenvolvimento
+npx expo start
+
+# Demonstração web na porta usada na apresentação
+EXPO_PUBLIC_DEMO_MODE=true npx expo start --web --port 8081 --clear
+
+# Qualidade e compatibilidade
 npx tsc --noEmit
+npx expo lint
+npx expo-doctor
+npx expo install --check
+
+# Verificação dos bundles
 EXPO_PUBLIC_DEMO_MODE=true npx expo export --platform all
+
+# Build de desenvolvimento na nuvem
+npx eas-cli@latest build --profile development
 ```
 
-### Referências
+## Solução de problemas na apresentação
 
-- [Expo SDK 58](https://docs.expo.dev/versions/v58.0.0/)
-- [React Native Maps](https://docs.expo.dev/versions/v58.0.0/sdk/map-view/)
-- [Políticas RLS do Supabase](https://supabase.com/docs/guides/database/postgres/row-level-security)
+### A porta 8081 já está em uso
 
----
+Encerre o servidor Expo anterior com `Ctrl+C` e execute novamente o comando de início. Evite manter mais de um Metro Bundler aberto para este projeto.
 
-## 📦 Disponível também
+### A página mostra uma versão antiga
 
-- **EAS Build** — `eas build --profile development` para builds de desenvolvimento
-- **EAS Update** — `eas update` para over-the-air updates
-- **Expo Go** — `npx expo start` para testar com o cliente Expo
+Use `Ctrl+Shift+R` no navegador. Se necessário, reinicie com `--clear`.
 
----
+Ao fechar ou recarregar uma aba durante uma resposta do servidor, o terminal de desenvolvimento pode registrar `This operation was aborted`. Essa mensagem indica que o navegador cancelou a requisição; confirme que `http://localhost:8081` continua respondendo antes de reiniciar o Expo.
 
+<<<<<<< HEAD
+=======
+### A entrada pula diretamente para o painel
+
+Isso indica que a autorização da demonstração foi preservada no armazenamento local. É o comportamento esperado. Para voltar à tela inicial, selecione **Sair**.
+
+### O mapa-base não aparece
+
+Confirme a conexão com a internet e se o provedor do mapa-base está acessível. As posições são geradas localmente, mas os blocos cartográficos da versão web dependem do provedor configurado.
+
+O empacotador também pode avisar que alguns ícones locais do CSS do Leaflet não são suportados. O painel usa marcadores próprios e não depende desses ícones padrão; o aviso não impede o mapa nem a exportação do projeto.
+
+### A câmera não abre no navegador
+
+Permita o acesso à câmera. Navegadores exigem contexto seguro, como `localhost` ou HTTPS. A consulta manual pelo código da bombona continua disponível.
+
+### Quero começar a apresentação do zero
+
+Abra **Configurações** e use **Reiniciar dados da demonstração**. Em seguida, deixe a simulação pausada até o momento de apresentá-la.
+
+## Verificação executada
+
+Os fluxos abaixo foram validados no modo demonstração:
+
+- entrada e painel geral;
+- mapa, pesquisa e seleção de bombona;
+- cadastro da bombona `BIO-003001` e consulta pelo QR Code;
+- cadastro e consulta de cliente;
+- detalhes dos caminhões;
+- histórico em tabela e mapa;
+- início, pausa e retomada do simulador;
+- geração e exibição de alertas;
+- persistência após recarregar a página;
+- navegação responsiva em largura móvel;
+- renderização web sem falha de hidratação.
+
+## Licença
+
+Consulte o arquivo [LICENSE](LICENSE).
+>>>>>>> 67a0247 (feat: prepara demonstracao BioOleo)

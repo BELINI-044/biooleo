@@ -1,4 +1,4 @@
-import { MaxContentWidth, Spacing } from "@/constants/theme";
+import { Colors, MaxContentWidth, Spacing } from "@/constants/theme";
 import {
   TabList,
   TabListProps,
@@ -11,8 +11,7 @@ import { SymbolView } from "expo-symbols";
 import type { ComponentProps } from "react";
 import { Pressable, StyleSheet, View } from "react-native";
 
-import { useColorScheme } from 'react-native';
-import { Colors } from '@/constants/theme';
+import { useColorScheme } from "@/hooks/use-color-scheme";
 
 import { ExternalLink } from "./external-link";
 import { ThemedText } from "./themed-text";
@@ -42,6 +41,8 @@ export function TabButton({
   ...props
 }: TabTriggerSlotProps) {
   const pressableProps = props as ComponentProps<typeof Pressable>;
+  const scheme = useColorScheme();
+  const base = scheme === "dark" ? Colors.dark : Colors.light;
 
   return (
     <Pressable
@@ -49,8 +50,11 @@ export function TabButton({
       style={({ pressed }) => (pressed ? styles.pressed : undefined)}
     >
       <ThemedView
-        type={isFocused ? "backgroundSelected" : "backgroundElement"}
-        style={styles.tabButtonView}
+        type="backgroundElement"
+        style={[
+          styles.tabButtonView,
+          isFocused && { backgroundColor: base.surfaceMuted },
+        ]}
       >
         <ThemedText
           type="small"
@@ -63,7 +67,7 @@ export function TabButton({
   );
 }
 
-export function CustomTabList() {
+export function CustomTabList({ children }: TabListProps) {
   const scheme = useColorScheme();
   const base = scheme === 'dark' ? Colors.dark : Colors.light;
 

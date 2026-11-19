@@ -2,8 +2,6 @@ import { useEffect, useState } from "react";
 
 import {
     ActivityIndicator,
-    Alert,
-    Image,
     Pressable,
     ScrollView,
     StyleSheet,
@@ -11,14 +9,12 @@ import {
     View,
 } from "react-native";
 
-import { useColorScheme } from 'react-native';
+import { useColorScheme } from "@/hooks/use-color-scheme";
 import { useRouter } from "expo-router";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 import {
     getCurrentUserProfile,
-    signOutUser,
-    type UserProfile,
     type UserRole,
 } from "@/services/authService";
 
@@ -39,7 +35,6 @@ export function DashboardScreen({
     const base = scheme === 'dark' ? Colors.dark : Colors.light;
     const router = useRouter();
 
-    const [profile, setProfile] = useState<UserProfile | null>(null);
     const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
@@ -63,7 +58,6 @@ export function DashboardScreen({
                     return;
                 }
 
-                setProfile(currentProfile);
             } catch {
                 if (isMounted) {
                     router.replace("/");
@@ -81,17 +75,6 @@ export function DashboardScreen({
             isMounted = false;
         };
     }, [requiredRole, router]);
-
-    async function handleLogout(): Promise<void> {
-        try {
-            await signOutUser();
-            router.replace("/");
-        } catch {
-            if (isMounted) {
-                router.replace("/");
-            }
-        }
-    }
 
     const styles = StyleSheet.create({
         safeArea: {
@@ -111,19 +94,19 @@ export function DashboardScreen({
             borderBottomColor: base.border,
         },
         backButton: {
-            color: base.yellow,
+            color: base.warning,
             fontSize: 14,
             fontWeight: "700",
             marginBottom: 22,
         },
         brandName: {
-            color: base.yellow,
+            color: base.warning,
             fontSize: 26,
             fontWeight: "900",
             letterSpacing: 2,
         },
         headerSubtitle: {
-            color: base.primary,
+            color: base.success,
             fontSize: 10,
             fontWeight: "800",
             letterSpacing: 1.5,
@@ -166,8 +149,8 @@ export function DashboardScreen({
 
                 {isLoading ? (
                     <View style={styles.loadingContainer}>
-                        <ActivityIndicator size="large" color={base.yellow} />
-                        <Text style={{ color: base.yellow }}>Carregando...</Text>
+                        <ActivityIndicator size="large" color={base.warning} />
+                        <Text style={{ color: base.warning }}>Carregando...</Text>
                     </View>
                 ) : null}
 

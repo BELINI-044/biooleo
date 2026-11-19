@@ -5,7 +5,6 @@
  * Cores validadas para contraste WCAG AA em light/dark modes.
  */
 
-import { type ReactNode } from "react";
 import { Colors } from '@/constants/theme';
 
 export const adminTheme = {
